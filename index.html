@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garimaverse</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            background-image: url('https://source.unsplash.com/1600x900/?galaxy');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: rgba(25, 25, 112, 0.8);
+        }
+        .logo {
+            height: 70px;
+        }
+        .company-name {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #f0f4f8;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+            justify-content: center;
+            text-align: center;
+        }
+        .login-form, .dashboard {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            margin-top: 30px;
+        }
+        input[type="text"], input[type="password"], input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: 2px solid #4a4e69;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            background-color: #6a0dad;
+            color: white;
+            margin-top: 25px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #4b0082;
+        }
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .task-item {
+            background-color: #e6e6fa;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+            transition: background-color 0.3s;
+        }
+        .task-item:hover {
+            background-color: #d8bfd8;
+        }
+        .error {
+            color: #ff4136;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .team-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        .team-section {
+            border: 2px solid #4a4e69;
+            width: calc(33% - 20px);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .new-task-form {
+            margin-top: 30px;
+        }
+        .update-button {
+            background-color: #6a0dad;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .update-button:hover {
+            background-color: #4b0082;
+        }
+        .logout-btn {
+            background-color: #ff4136;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        .logout-btn:hover {
+            background-color: #dc352d;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="logo.jpeg" alt="Logo" class="logo">
+        <h1 class="company-name">Garimaverse</h1>
+        <a href="index.html" class="logout-btn">Logout</a>
+        <div style="width: 70px;"></div>
+    </div>
+    
+    <div class="container">
+        <div id="loginForm" class="login-form">
+            <h2>Login to Garimaverse</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="attemptLogin()">Login</button>
+            <p id="loginError" class="error"></p>
+        </div>
+        <div id="employeeDashboard" class="dashboard" style="display:none;">
+            <h2 style="text-decoration: underline;">Welcome Garima</h2>
+            <div>
+                <p>
+                    Member: Creative Design Team
+                </p>
+            </div>
+            <h3>My Tasks</h3>
+            <form id="employeeTasksForm">
+                <div id="employeeTasks" class="task-list"></div>
+                <button type="button" class="update-button" onclick="updateEmployeeTasks()">Update Tasks</button>
+            </form>
+        </div>
+        <div id="adminDashboard" class="dashboard" style="display:none;">
+            <h2>Garimaverse Admin Dashboard</h2>
+            <div class="team-container">
+                <div class="team-section">
+                    <h2>Creative Design Team</h2>
+                    <hr>
+                    <p style="font-size: small;"> Members: Garima, Ananya, Priya</p>
+                    <hr>
+                    <h3>Tasks:</h3>
+                    <div id="creativeDesignTasks"></div>
+                    <div class="new-task-form">
+                        <h4>Add New Task</h4>
+                        <input type="text" id="newCreativeDesignTask" placeholder="Task Name">
+                        <input type="date" id="newCreativeDesignDeadline">
+                        <button onclick="addNewTeamTask('creativeDesign')">Add Task</button>
+                    </div>
+                </div>
+                <div class="team-section">
+                    <h2>Content Writing Team</h2>
+                    <hr>
+                    <p style="font-size: small;">Members: Riya, Neha, Aditya</p>
+                    <hr>
+                    <h3>Tasks:</h3>
+                    <div id="contentWritingTasks"></div>
+                    <div class="new-task-form">
+                        <h4>Add New Task</h4>
+                        <input type="text" id="newContentWritingTask" placeholder="Task Name">
+                        <input type="date" id="newContentWritingDeadline">
+                        <button onclick="addNewTeamTask('contentWriting')">Add Task</button>
+                    </div>
+                </div>
+                <div class="team-section">
+                    <h2>Digital Marketing Team</h2>
+                    <hr>
+                    <p style="font-size: small;">Members: Vikram, Pooja, Rahul</p>
+                    <hr>
+                    <h3>Tasks:</h3>
+                    <div id="digitalMarketingTasks"></div>
+                    <div class="new-task-form">
+                        <h4>Add New Task</h4>
+                        <input type="text" id="newDigitalMarketingTask" placeholder="Task Name">
+                        <input type="date" id="newDigitalMarketingDeadline">
+                        <button onclick="addNewTeamTask('digitalMarketing')">Add Task</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var users = [
+            { id: 1, username: "admin", password: "admin123", role: "admin" },
+            { id: 2, username: "garima", password: "emp123", role: "employee" }
+        ];
+
+        var tasks = [
+            { id: 1, name: "Design new logo", description: "Create a modern and vibrant logo for our new product line", assignedTo: 2, completed: false },
+            { id: 2, name: "Develop brand guidelines", description: "Establish comprehensive brand guidelines for consistent visual identity", assignedTo: 2, completed: false },
+            { id: 3, name: "Create social media graphics", description: "Design engaging graphics for our upcoming social media campaign", assignedTo: 2, completed: false },
+            { id: 4, name: "Redesign website homepage", description: "Update the homepage design to reflect our new branding", assignedTo: 2, completed: false },
+            { id: 5, name: "Prepare design presentation", description: "Create slides for the upcoming client design review meeting", assignedTo: 2, completed: false }
+        ];
+
+        var teamTasks = {
+            creativeDesign: [
+                { id: 1, name: "Design new product packaging", deadline: "2024-09-20", completed: false },
+                { id: 2, name: "Create infographic for annual report", deadline: "2024-09-25", completed: true }
+            ],
+            contentWriting: [
+                { id: 1, name: "Write blog posts for product launch", deadline: "2024-09-22", completed: false },
+                { id: 2, name: "Develop content strategy for Q4", deadline: "2024-09-28", completed: true }
+            ],
+            digitalMarketing: [
+                { id: 1, name: "Plan social media campaign", deadline: "2024-09-18", completed: true },
+                { id: 2, name: "Analyze SEO performance", deadline: "2024-09-23", completed: false }
+            ]
+        };
+
+        var currentUser = null;
+
+        function login(username, password) {
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].username === username && users[i].password === password) {
+                    currentUser = users[i];
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function getEmployeeTasks(userId) {
+            return tasks.filter(task => task.assignedTo === userId);
+        }
+
+        function attemptLogin() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            if (login(username, password)) {
+                document.getElementById('loginForm').style.display = 'none';
+                if (currentUser.role === 'admin') {
+                    document.getElementById('adminDashboard').style.display = 'block';
+                    displayTeamTasks();
+                } else {
+                    document.getElementById('employeeDashboard').style.display = 'block';
+                    displayEmployeeTasks();
+                }
+            } else {
+                document.getElementById('loginError').textContent = 'Invalid username or password';
+            }
+        }
+
+        function displayEmployeeTasks() {
+            var taskList = document.getElementById('employeeTasks');
+            taskList.innerHTML = '';
+            var employeeTasks = getEmployeeTasks(currentUser.id);
+            employeeTasks.forEach(task => {
+                var div = document.createElement('div');
+                div.className = 'task-item';
+                div.innerHTML = `
+                    <input type="checkbox" id="task_${task.id}" name="task_${task.id}" ${task.completed ? 'checked' : ''}>
+                    <label for="task_${task.id}">${task.name}: ${task.description}</label>
+                `;
+                taskList.appendChild(div);
+            });
+        }
+
+        function updateEmployeeTasks() {
+            var employeeTasks = getEmployeeTasks(currentUser.id);
+            employeeTasks.forEach(task => {
+                var checkbox = document.querySelector(`input[id="task_${task.id}"]`);
+                if (checkbox) {
+                    task.completed = checkbox.checked;
+                }
+            });
+            alert('Tasks updated successfully!');
+        }
+
+        function displayTeamTasks() {
+            displayTasksForTeam('creativeDesign');
+            displayTasksForTeam('contentWriting');
+            displayTasksForTeam('digitalMarketing');
+        }
+
+        function displayTasksForTeam(team) {
+            var tasksContainer = document.getElementById(team + 'Tasks');
+            tasksContainer.innerHTML = '';
+            teamTasks[team].forEach(task => {
+                var taskElement = document.createElement('div');
+                taskElement.className = 'task-item';
+                taskElement.innerHTML = `
+                    <input type="checkbox" id="${team}_task_${task.id}" name="${team}_task_${task.id}" ${task.completed ? 'checked' : ''} onchange="updateTaskStatus('${team}', ${task.id}, this.checked)">
+                    <label for="${team}_task_${task.id}">${task.name} (Deadline: ${task.deadline})</label>
+                `;
+                tasksContainer.appendChild(taskElement);
+            });
+        }
+
+        function updateTaskStatus(team, taskId, completed) {
+            var task = teamTasks[team].find(t => t.id === taskId);
+            if (task) {
+                task.completed = completed;
+            }
+        }
+
+        function addNewTeamTask(team) {
+            var taskName = document.getElementById('new' + team.charAt(0).toUpperCase() + team.slice(1) + 'Task').value;
+            var taskDeadline = document.getElementById('new' + team.charAt(0).toUpperCase() + team.slice(1) + 'Deadline').value;
+            if (taskName && taskDeadline) {
+                var newTask = {
+                    id: teamTasks[team].length + 1,
+                    name: taskName,
+                    deadline: taskDeadline,
+                    completed: false
+                };
+                teamTasks[team].push(newTask);
+                displayTasksForTeam(team);
+                document.getElementById('new' + team.charAt(0).toUpperCase() + team.slice(1) + 'Task').value = '';
+                document.getElementById('new' + team.charAt(0).toUpperCase() + team.slice(1) + 'Deadline').value = '';
+            }
+        }
+    </script>
+</body>
+</html>
